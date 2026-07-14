@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bozorcha — Admin Panel</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap');
+:root {
+  --red:#C1361F; --red-dk:#8F2814; --red-lt:#FBEBE6;
+  --gold:#C89B3C; --gold-dk:#9C7526; --gold-lt:#FBF3E1;
+  --ink:#221D16; --ink2:#5B5346; --ink3:#9C9384;
+  --line:#E7E0D0; --bg:#F7F2E7; --white:#FFFFFF;
+  --green:#1A7A4A; --green-lt:#E8F5EE;
+  --brand-green:#1D3B30; --brand-green-dk:#12241D;
+  --f-display:'Fraunces',Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink)}
+a{text-decoration:none;color:inherit}
+button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none}
+
+/* ===== YANGI ADMIN LOGIN SCREEN ===== */
+.login-screen{
+  position:fixed;inset:0;
+  background:linear-gradient(135deg, #0D1F18 0%, var(--brand-green-dk) 50%, var(--brand-green) 100%);
+  display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px
+}
+.login-container {
+  background-color: var(--white);
+  border-radius: 30px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+  width: 768px;
+  max-width: 100%;
+  min-height: 480px;
+}
+.login-container p {
+  font-size: 13.5px;
+  line-height: 20px;
+  letter-spacing: 0.3px;
+  margin: 15px 0;
+  color: var(--ink2);
+}
+.login-container span {
+  font-size: 12px;
+  color: var(--ink3);
+  margin-bottom: 10px;
+}
+.login-container button.btn-form {
+  background-color: var(--red);
+  color: #fff;
+  font-size: 12px;
+  padding: 12px 35px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 12px rgba(193,54,31,.25);
+}
+.login-container button.btn-form:hover {
+  background-color: var(--red-dk);
+}
+.login-container button.hidden {
+  background-color: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  font-size: 12px;
+  padding: 10px 35px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.login-container form {
+  background-color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 40px;
+  height: 100%;
+  text-align: center;
+}
+.login-container input {
+  background-color: var(--bg);
+  border: 2px solid var(--line);
+  margin: 8px 0;
+  padding: 11px 15px;
+  font-size: 13.5px;
+  border-radius: 8px;
+  width: 100%;
+  outline: none;
+  color: var(--ink);
+  transition: border-color 0.15s;
+}
+.login-container input:focus {
+  border-color: var(--red);
+}
+
+/* Form Konteynerlari */
+.form-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
+}
+
+/* Tizimga kirish (Sign In) */
+.sign-in {
+  left: 0;
+  width: 50%;
+  z-index: 2;
+}
+.login-container.active .sign-in {
+  transform: translateX(100%);
+}
+
+/* Qo'shimcha ma'lumot (Sign Up) */
+.sign-up {
+  left: 0;
+  width: 50%;
+  opacity: 0;
+  z-index: 1;
+}
+.login-container.active .sign-up {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: move 0.6s;
+}
+@keyframes move {
+  0%, 49.9% { opacity: 0; z-index: 1; }
+  50%, 100% { opacity: 1; z-index: 5; }
+}
+
+/* Toggle Bloki */
+.toggle-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: all 0.6s ease-in-out;
+  border-radius: 100px 0 0 100px;
+  z-index: 1000;
+}
+.login-container.active .toggle-container {
+  transform: translateX(-100%);
+  border-radius: 0 100px 100px 0;
+}
+.toggle {
+  background: linear-gradient(to right, var(--brand-green-dk), var(--brand-green));
+  color: #fff;
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: all 0.6s ease-in-out;
+}
+.login-container.active .toggle {
+  transform: translateX(50%);
+}
+.toggle-panel {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 30px;
+  text-align: center;
+  top: 0;
+  transform: translateX(0);
+  transition: all 0.6s ease-in-out;
+}
+.toggle-left {
+  transform: translateX(-200%);
+}
+.login-container.active .toggle-left {
+  transform: translateX(0);
+}
+.toggle-right {
+  right: 0;
+  transform: translateX(0);
+}
+.login-container.active .toggle-right {
+  transform: translateX(200%);
+}
+
+/* LAYOUT VA BOSHQA KODLAR SHU YERDAN BOSHLANADI */
+.admin-layout{display:flex;min-height:100vh}
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+  <div class="login-container" id="loginContainer">
+    
+    <div class="form-container sign-in">
+      <form id="loginForm">
+        <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 5px;">Admin Tizimiga Kirish</h2>
+        <p style="margin-bottom: 10px;">Davom etish uchun Email va Parolni kiriting</p>
+        
+        <input type="email" id="loginEmail" placeholder="admin@bozorcha.uz">
+        <input type="password" id="loginPass" placeholder="Parol">
+        
+        <button type="submit" class="btn-form" id="loginBtn">Kirish</button>
+      </form>
+    </div>
+
+    <div class="form-container sign-up">
+      <form>
+        <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 5px;">Xavfsizlik eslatmasi</h2>
+        <p style="margin-bottom: 15px; line-height: 1.6;">Ushbu panel faqatgina vakolatli tizim administratorlari uchun mo'ljallangan. Agar login ma'lumotlaringiz bo'lmasa, bosh sahifaga qayting.</p>
+        <button type="button" onclick="location.href='/'" class="btn-form">Bosh sahifaga qaytish</button>
+      </form>
+    </div>
+
+    <div class="toggle-container">
+      <div class="toggle">
+        <div class="toggle-panel toggle-left">
+          <h1 style="font-family: var(--f-display); font-size: 24px; margin-bottom: 10px;">Tayyormisiz?</h1>
+          <p>Login va Parolingizni kiritib panelga kiring</p>
+          <button class="hidden" id="loginToggle">Kirish</button>
+        </div>
+        <div class="toggle-panel toggle-right">
+          <h1 style="font-family: var(--f-display); font-size: 24px; margin-bottom: 10px;">Diqqat!</h1>
+          <p>Tizim xavfsizligi va ma'lumotlar muhofazalanganligi haqida o'qing</p>
+          <button class="hidden" id="registerToggle">Batafsil</button>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="admin-layout" id="adminLayout" style="display:none;">
+  </div>
+
+<script>
+  // Panel animatsiyasi va almashtirish
+  const loginContainer = document.getElementById('loginContainer');
+  const registerToggle = document.getElementById('registerToggle');
+  const loginToggle = document.getElementById('loginToggle');
+
+  registerToggle.addEventListener('click', () => {
+    loginContainer.classList.add("active");
+  });
+
+  loginToggle.addEventListener('click', () => {
+    loginContainer.classList.remove("active");
+  });
+</script>
